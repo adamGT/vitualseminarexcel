@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <v-app-bar
+    <!-- <v-app-bar
       app
       color="black"
       dark
     >
       
-    </v-app-bar>
+    </v-app-bar> -->
 
     <v-main>
       <router-view/>

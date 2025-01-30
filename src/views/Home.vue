@@ -1,47 +1,40 @@
 <template>
   <div>
+      <div ><h1 class="seminar-title centerr">Blue Health Virtual Seminar </h1></div>
+      <br/>
     <div>
-      
       <div v-if="isDataSaved"><h1 class="seminar-title">{{seminarTitle}}</h1></div>
       <div v-if="isDataSaved"><p class="presenter-name">{{presentersName}}</p></div>
       <div v-if="isDataSaved"><p class="seminar-title"> Paid Count = {{paidPeopleCount}}</p></div>
       <v-row v-if="!isDataSaved">
-        <v-col
+      
+      <v-col
           class="d-flex"
-          cols="8"
-          md="4"
-          sm="4"
+          cols="2"
+          md="2"
+          sm="2"
         >
-          <v-text-field
-            class="mt-4"
-            v-model="seminarTitle"
-            label="Seminar Title"
-            dense
-            single-line
-            outlined
-          ></v-text-field>
+        <v-btn-toggle
+          v-model="paidorna"
+          color="indigo darken-4"
+          rounded="0"
+          group
+        >
+          <v-btn value="paid">
+            Paid
+          </v-btn>
+          <v-btn value="sponsored">
+            Sponsored
+          </v-btn>
+        </v-btn-toggle>
         </v-col>
         
+    
         <v-col
           class="d-flex"
-          cols="8"
-          md="3"
-          sm="3"
-        >
-          <v-text-field
-            class="mt-4"
-            v-model="presentersName"
-            label="Presenter's Name"
-            dense
-            single-line
-            outlined
-          ></v-text-field>
-        </v-col>
-        <v-col
-          class="d-flex"
-          cols="8"
-          md="3"
-          sm="3"
+          cols="2"
+          md="1"
+          sm="1"
         >
           <v-text-field
             class="mt-4"
@@ -53,20 +46,20 @@
           ></v-text-field>
         </v-col>
         <v-col
+          v-if="paidorna === 'sponsored'"
           class="d-flex"
           cols="8"
-          md="3"
-          sm="3"
-          >
-          <v-btn
+          md="4"
+          sm="4"
+        >
+          <v-text-field
             class="mt-4"
-            rounded
-            color="primary"
-            @click="saveData"
-            dark
-          >
-            Save Data
-          </v-btn>
+            v-model="sponsorName"
+            label="Sponsor Name"
+            dense
+            single-line
+            outlined
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
@@ -82,11 +75,7 @@
                 Upload File <input type="file" @change="onChange">
             </span>
             
-          <!-- <v-btn 
-            class="ma-2"
-            @click="onButton"
-            color="error"
-            > Test</v-btn> -->
+
           </div>
         </v-col>
         
@@ -224,6 +213,8 @@ export default {
       presentersName: null,
       isDataSaved: false,
       isDataChanged: false,
+      sponsorName: "Sponsor Name Here",
+      paidorna: "paid",
       collection: [],
       points: "1.5",
       displaytable: false,
@@ -304,7 +295,11 @@ export default {
       for(let i = 0; i < this.selected.length; i++){
         this.selectedData = this.selected[i]
         this.copytoclipboard()
+        if(this.paidorna === "paid"){
         window.open(`mailto:${this.selected[i].Email}?subject=${this.points} CEU CPD certificate for ${this.seminarTitle} Virtual Seminar&body=Dear ${this.selected[i].Name} , %0D%0DThank you for attending the ${this.seminarTitle} Virtual Seminar presented by ${this.presentersName}. We have successfully received your payment for the certificate. %0DPlease find your certificaate attached. Feel free to share it on LinkedIn and other social media platforms. %0DYou can also access the recording of this session(once uploaded) and previous sessions on our YOUTUBE channel. %0D%0DYouTube channel link %0Dhttps://www.youtube.com/channel/UC2v9R3kHD4Auor0NkyQYHZw %0D%0DLink to your certificate: ${this.selected[i].Link}   %0D%0DBest regards, %0DBlue Health team`);
+        }else {
+        window.open(`mailto:${this.selected[i].Email}?subject= Free ${this.points} CEU CPD certificate for ${this.seminarTitle} Virtual Seminar sponsored by ${this.sponsorName} &body=Dear ${this.selected[i].Name} , %0D%0DThank you for attending the ${this.seminarTitle} Virtual Seminar presented by ${this.presentersName}. Attached is your certificate, proudly sponsored by ${this.sponsorName}. You're welcome to share it on LinkedIn and other social media. Feel free to share it on LinkedIn and other social media platforms. %0DYou can also access the recording of this session(once uploaded) and previous sessions on our YOUTUBE channel. %0D%0DYouTube channel link %0Dhttps://www.youtube.com/channel/UC2v9R3kHD4Auor0NkyQYHZw %0D%0DLink to your certificate: ${this.selected[i].Link}   %0D%0DBest regards, %0DBlue Health team`); 
+        }
         this.collection[this.collection.indexOf(this.selected[i])].Paid = "yes"
         this.isDataChanged = true
         this.countPaidPeople();
@@ -368,5 +363,10 @@ export default {
   background: white;
   cursor: inherit;
   display: block;
+}
+.centerr {
+  text-align: center;
+  background: rgb(54, 112, 219);
+  color: rgb(255, 255, 255);
 }
 </style>
